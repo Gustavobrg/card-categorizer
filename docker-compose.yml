@@ -1,0 +1,27 @@
+services:
+  process-data:
+    build:
+      context: .
+      dockerfile: Dockerfile.data_processing
+    container_name: process-data
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env  # Carrega o arquivo .env sem copiá-lo para o contêiner
+    environment:
+    - PYTHONPATH=/app/src
+    restart: no
+  
+  interface:
+    build:
+      context: .
+      dockerfile: Dockerfile.interface
+    container_name: streamlit-interface
+    ports:
+      - "8501:8501"  # Mapeia a porta 8501 do contêiner para a porta 8501 do host
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env  # Carrega o arquivo .env sem copiá-lo para o contêiner
+    environment:
+      - PYTHONPATH=/app/src

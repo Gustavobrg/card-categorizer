@@ -1,0 +1,19 @@
+# Use uma imagem base oficial do Python
+FROM python:3.12.4-slim
+
+# Defina o diretório de trabalho
+WORKDIR /app
+
+# Copie apenas o requirements.txt e instale as dependências
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar o código-fonte do projeto
+COPY src/data_processing/ src/data_processing/
+COPY src/config.py src/config.py
+
+# Adicionar o diretório src ao PYTHONPATH
+ENV PYTHONPATH=/app/src
+
+# Comando para executar o módulo de processamento de dados
+CMD ["python", "-m", "data_processing.categoriza_dados"]
